@@ -1,0 +1,17 @@
+plugins:
+  bbb_enabled:
+    default: false
+    client: true
+  bbb_endpoint:
+    default: ""
+    client: false
+  bbb_secret:
+    default: ""
+    client: false
+    secret: true
+  bbb_full_window:
+    default: true
+    client: true
+  bbb_staff_only:
+    default: true
+    client: true

@@ -1,0 +1,13 @@
+en:
+  js:
+    bbb:
+      composer_title: BigBlueButton Integration
+      meetingID: Meeting ID
+      button_text: Button label (optional)
+      attendeePW: Attendee password
+      moderatorPW: Moderator password
+      launch: Start Video Conference
+      modal:
+        insert: Insert
+        cancel: Cancel
+        title: Add BBB Integration
