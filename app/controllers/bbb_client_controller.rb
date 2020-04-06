@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'digest/sha1'
 
 module BigBlue
@@ -7,30 +8,31 @@ module BigBlue
 
     def create
       render json: {
-        url: build_url(params)
+        url: create_and_join(params)
       }
+    end
+
+    def status
+      render json: get_status(params)
     end
 
     private
 
-    def build_url(args)
+    def create_and_join(args)
       return false unless SiteSetting.bbb_endpoint && SiteSetting.bbb_secret
 
       meeting_id = args['meetingID']
-      url = SiteSetting.bbb_endpoint
-      secret = SiteSetting.bbb_secret
       attendee_pw = args['attendeePW']
       moderator_pw = args['moderatorPW']
 
       query = {
         meetingID: meeting_id,
         attendeePW: attendee_pw,
-        moderatorPW: moderator_pw
+        moderatorPW: moderator_pw,
+        logoutURL: SiteSetting.bbb_full_window ? Discourse.base_url : "default"
       }.to_query
 
-      checksum = Digest::SHA1.hexdigest ("create" + query + secret)
-
-      create_url = "#{url}create?#{query}&checksum=#{checksum}"
+      create_url = build_url("create", query)
       response = Excon.get(create_url)
 
       if response.status != 200
@@ -41,11 +43,42 @@ module BigBlue
       join_params = {
         fullName: current_user.name || current_user.username,
         meetingID: meeting_id,
-        password: attendee_pw # TODO: pass moderator username or staff as moderator?
+        userID: current_user.username,
+        password: is_moderator ? moderator_pw : attendee_pw
       }.to_query
 
-      join_checksum = Digest::SHA1.hexdigest ("join" + join_params + secret)
-      "#{url}join?#{join_params}&checksum=#{join_checksum}"
+      build_url("join", join_params)
+    end
+
+    def get_status(args)
+      return {} unless SiteSetting.bbb_endpoint && SiteSetting.bbb_secret
+
+      url = build_url("getMeetingInfo", "meetingID=#{args['meeting_id']}")
+      response = Excon.get(url)
+      data = Hash.from_xml(response.body)
+
+      if data['response']['returncode'] == "SUCCESS"
+        att = data['response']['attendees']['attendee']
+        {
+          count: data['response']['participantCount'],
+          usernames: att.is_a?(Array) ? att.pluck("userID") : [att["userID"]]
+        }
+      else
+        {}
+      end
+    end
+
+    def build_url(type, query)
+      secret = SiteSetting.bbb_secret
+      checksum = Digest::SHA1.hexdigest(type + query + secret)
+      "#{SiteSetting.bbb_endpoint}#{type}?#{query}&checksum=#{checksum}"
+    end
+
+    def is_moderator
+      return true if current_user.staff?
+
+      group = SiteSetting.bbb_moderator_group_name
+      return true if group.present? && current_user.groups.pluck(:name).include?(group)
     end
   end
 end

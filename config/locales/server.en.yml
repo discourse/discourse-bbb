@@ -5,3 +5,4 @@ en:
     bbb_secret: "BigBlueButton Shared Secret"
     bbb_full_window: "If unchecked, video conference will load in an iframe."
     bbb_staff_only: "Only show toolbar button to staff members."
+    bbb_moderator_group_name: "Add the name of a group whose members should log in as moderators in video conferences."

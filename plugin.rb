@@ -7,6 +7,7 @@
 # url: https://github.com/pmusaraj/discourse-bbb
 
 enabled_site_setting :bbb_enabled
+register_asset "stylesheets/common/bbb.scss"
 register_svg_icon "fab-bootstrap"
 register_svg_icon "video"
 
@@ -26,6 +27,7 @@ after_initialize do
 
   BigBlue::Engine.routes.draw do
     post '/create' => 'bbb_client#create', constraints: { format: :json }
+    get '/status/:meeting_id' => 'bbb_client#status', constraints: { format: :json }
   end
 
   Discourse::Application.routes.append do

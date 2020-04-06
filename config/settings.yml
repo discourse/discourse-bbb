@@ -15,3 +15,6 @@ plugins:
   bbb_staff_only:
     default: true
     client: true
+  bbb_moderator_group_name:
+    default: ""
+    client: false

@@ -3,6 +3,7 @@ import showModal from "discourse/lib/show-modal";
 import { iconHTML } from "discourse-common/lib/icon-library";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import { avatarImg } from "discourse/widgets/post";
 
 function launchBBB($elem, fullWindow) {
   const data = $elem.data();
@@ -13,7 +14,6 @@ function launchBBB($elem, fullWindow) {
   })
     .then(res => {
       if (res.url) {
-        console.log(fullWindow);
         if (fullWindow) {
           window.location.href = res.url;
         } else {
@@ -40,6 +40,17 @@ function attachButton($elem, fullWindow) {
   $elem.find("button").on("click", () => launchBBB($elem, fullWindow));
 }
 
+function attachStatus($elem, helper) {
+  const status = $elem.find(".bbb-status");
+  const data = $elem.data();
+
+  ajax(`/bbb/status/${data.meetingID}.json`).then(res => {
+    if (res.usernames) {
+      status.html(`On the call: ${res.usernames.join(", ")}`);
+    }
+  });
+}
+
 function attachBBB($elem, helper) {
   if (helper) {
     const siteSettings = Discourse.__container__.lookup("site-settings:main");
@@ -47,6 +58,8 @@ function attachBBB($elem, helper) {
 
     $elem.find("[data-wrap=discourse-bbb]").each((idx, val) => {
       attachButton($(val), fullWindow);
+      $(val).append("<span class='bbb-status'></span>");
+      attachStatus($(val), helper);
     });
   }
 }
