@@ -59,9 +59,18 @@ module BigBlue
 
       if data['response']['returncode'] == "SUCCESS"
         att = data['response']['attendees']['attendee']
+        usernames = att.is_a?(Array) ? att.pluck("userID") : [att["userID"]]
+        users = User.where("lower(username) IN (?)", usernames)
+        avatars = users.map do |s|
+          {
+            name: s.name || s.username,
+            avatar_url: s.avatar_template_url.gsub('{size}', '25')
+          }
+        end
+
         {
           count: data['response']['participantCount'],
-          usernames: att.is_a?(Array) ? att.pluck("userID") : [att["userID"]]
+          avatars: avatars
         }
       else
         {}

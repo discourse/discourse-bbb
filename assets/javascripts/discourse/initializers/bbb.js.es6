@@ -3,7 +3,6 @@ import showModal from "discourse/lib/show-modal";
 import { iconHTML } from "discourse-common/lib/icon-library";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
-import { avatarImg } from "discourse/widgets/post";
 
 function launchBBB($elem, fullWindow) {
   const data = $elem.data();
@@ -45,8 +44,13 @@ function attachStatus($elem, helper) {
   const data = $elem.data();
 
   ajax(`/bbb/status/${data.meetingID}.json`).then(res => {
-    if (res.usernames) {
-      status.html(`On the call: ${res.usernames.join(", ")}`);
+    if (res.avatars) {
+      status.html(`<span>On the call: </span>`);
+      res.avatars.forEach(function(avatar) {
+        status.append(
+          `<img src="${avatar.avatar_url}" class="avatar" width="25" height="25" title="${avatar.name}" />`
+        );
+      });
     }
   });
 }
