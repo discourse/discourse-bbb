@@ -9,9 +9,9 @@ function launchBBB($elem, fullWindow) {
 
   ajax("/bbb/create.json", {
     type: "POST",
-    data: data
+    data: data,
   })
-    .then(res => {
+    .then((res) => {
       if (res.url) {
         if (fullWindow) {
           window.location.href = res.url;
@@ -43,7 +43,7 @@ function attachStatus($elem, helper) {
   const status = $elem.find(".bbb-status");
   const data = $elem.data();
 
-  ajax(`/bbb/status/${data.meetingID}.json`).then(res => {
+  ajax(`/bbb/status/${data.meetingID}.json`).then((res) => {
     if (res.avatars) {
       status.html(`<span>On the call: </span>`);
       res.avatars.forEach(function(avatar) {
@@ -72,26 +72,36 @@ export default {
   name: "insert-bbb",
 
   initialize() {
-    withPluginApi("0.8.31", api => {
+    withPluginApi("0.8.31", (api) => {
       const currentUser = api.getCurrentUser();
       const siteSettings = api.container.lookup("site-settings:main");
 
-      api.onToolbarCreate(toolbar => {
-        if (siteSettings.bbb_staff_only && !currentUser.staff) {
-          return;
-        }
-
-        toolbar.addButton({
-          title: "bbb.composer_title",
-          id: "insertBBB",
-          group: "insertions",
-          icon: "fab-bootstrap",
-          perform: e =>
-            showModal("insert-bbb").setProperties({ toolbarEvent: e })
-        });
+      api.decorateCooked(attachBBB, {
+        id: "discourse-bbb",
       });
 
-      api.decorateCooked(attachBBB, { id: "discourse-bbb" });
+      if (siteSettings.bbb_staff_only && !currentUser.staff) {
+        return;
+      }
+
+      api.modifyClass("controller:composer", {
+        actions: {
+          insertBBBModal() {
+            showModal("insert-bbb").setProperties({
+              toolbarEvent: this.get("toolbarEvent"),
+            });
+          },
+        },
+      });
+
+      api.addToolbarPopupMenuOptionsCallback((controller) => {
+        return {
+          id: "insert-bbb",
+          icon: "video",
+          action: "insertBBBModal",
+          label: "bbb.composer_title",
+        };
+      });
     });
-  }
+  },
 };
