@@ -60,7 +60,8 @@ module BigBlue
       if data['response']['returncode'] == "SUCCESS"
         att = data['response']['attendees']['attendee']
         usernames = att.is_a?(Array) ? att.pluck("userID") : [att["userID"]]
-        users = User.where("lower(username) IN (?)", usernames)
+        users = User.where("username IN (?)", usernames)
+
         avatars = users.map do |s|
           {
             name: s.name || s.username,
