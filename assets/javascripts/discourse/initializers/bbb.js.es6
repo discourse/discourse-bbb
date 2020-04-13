@@ -18,7 +18,7 @@ function launchBBB($elem, fullWindow) {
         } else {
           $elem.children().hide();
           $elem.append(
-            `<iframe src="${res.url}" allow="camera;microphone;fullscreen;speaker" width="690" height="500" style="border:none"></iframe>`
+            `<iframe src="${res.url}" allowfullscreen="true" allow="camera; microphone; fullscreen; speaker" width="690" height="500" style="border:none"></iframe>`
           );
         }
       }
