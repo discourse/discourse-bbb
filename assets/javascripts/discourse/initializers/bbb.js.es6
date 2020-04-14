@@ -3,9 +3,11 @@ import showModal from "discourse/lib/show-modal";
 import { iconHTML } from "discourse-common/lib/icon-library";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import { isAppWebview } from "discourse/lib/utilities";
 
 function launchBBB($elem, fullWindow) {
-  const data = $elem.data();
+  const data = $elem.data(),
+    site = Discourse.__container__.lookup("site:main");
 
   ajax("/bbb/create.json", {
     type: "POST",
@@ -13,7 +15,7 @@ function launchBBB($elem, fullWindow) {
   })
     .then((res) => {
       if (res.url) {
-        if (fullWindow) {
+        if (fullWindow || site.mobileView || isAppWebview()) {
           window.location.href = res.url;
         } else {
           $elem.children().hide();
