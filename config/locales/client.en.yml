@@ -1,7 +1,7 @@
 en:
   js:
     bbb:
-      composer_title: Add BigBlueButton room
+      composer_title: Add BigBlueButton
       meetingID: Meeting ID
       button_text: Button label (optional)
       attendeePW: Attendee password
