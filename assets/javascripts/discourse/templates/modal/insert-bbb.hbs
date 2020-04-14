@@ -19,6 +19,21 @@
     <label>{{i18n "bbb.moderatorPW"}}</label>
     {{text-field value=moderatorPW}}
   </div>
+
+  <div class="insert-bbb-input">
+    <label class='checkbox-label'>
+      {{input type="checkbox" checked=mobileIframe}}
+      {{i18n "bbb.modal.mobile_iframe"}}
+    </label>
+  </div>
+
+  <div class="insert-bbb-input">
+    <label class='checkbox-label'>
+      {{input type="checkbox" checked=desktopIframe}}
+      {{i18n "bbb.modal.desktop_iframe"}}
+    </label>
+  </div>
+
 </div>
 {{/d-modal-body}}
 

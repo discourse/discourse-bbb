@@ -11,3 +11,5 @@ en:
         insert: Insert
         cancel: Cancel
         title: Add BBB Integration
+        mobile_iframe: Show in an iframe on mobile devices
+        desktop_iframe: Show in an iframe on desktop devices

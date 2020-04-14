@@ -9,9 +9,6 @@ plugins:
     default: ""
     client: false
     secret: true
-  bbb_full_window:
-    default: true
-    client: true
   bbb_staff_only:
     default: true
     client: true

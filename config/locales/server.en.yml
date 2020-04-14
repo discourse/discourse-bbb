@@ -3,6 +3,5 @@ en:
     bbb_enabled: "Enable BigBlueButton integration"
     bbb_endpoint: "BigBlueButton Server URL (must include `api/`, as in: mysite.com/bigbluebutton/api/)."
     bbb_secret: "BigBlueButton Shared Secret"
-    bbb_full_window: "If unchecked, video conference will load in an iframe on desktop clients."
     bbb_staff_only: "Only show toolbar button to staff members."
     bbb_moderator_group_name: "Add the name of a group whose members should log in as moderators in video conferences."

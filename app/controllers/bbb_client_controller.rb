@@ -29,7 +29,7 @@ module BigBlue
         meetingID: meeting_id,
         attendeePW: attendee_pw,
         moderatorPW: moderator_pw,
-        logoutURL: SiteSetting.bbb_full_window ? Discourse.base_url : "default"
+        logoutURL: Discourse.base_url
       }.to_query
 
       create_url = build_url("create", query)

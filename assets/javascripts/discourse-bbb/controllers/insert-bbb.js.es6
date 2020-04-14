@@ -15,7 +15,9 @@ export default Controller.extend(ModalFunctionality, {
       meetingID: "",
       attendeePW: "",
       moderatorPW: "",
-      buttonText: ""
+      buttonText: "",
+      mobileIframe: false,
+      desktopIframe: true,
     });
   },
 
@@ -23,12 +25,12 @@ export default Controller.extend(ModalFunctionality, {
     insert() {
       const btnTxt = this.buttonText ? ` label="${this.buttonText}"` : "";
       this.toolbarEvent.addText(
-        `[wrap=discourse-bbb meetingID="${this.meetingID}"${btnTxt} attendeePW="${this.attendeePW}" moderatorPW="${this.moderatorPW}"][/wrap]`
+        `[wrap=discourse-bbb meetingID="${this.meetingID}"${btnTxt} attendeePW="${this.attendeePW}" moderatorPW="${this.moderatorPW}" mobileIframe="${this.mobileIframe}" desktopIframe="${this.desktopIframe}"][/wrap]`
       );
       this.send("closeModal");
     },
     cancel() {
       this.send("closeModal");
-    }
-  }
+    },
+  },
 });

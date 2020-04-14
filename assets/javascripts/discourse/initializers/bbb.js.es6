@@ -5,7 +5,7 @@ import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import { isAppWebview } from "discourse/lib/utilities";
 
-function launchBBB($elem, fullWindow) {
+function launchBBB($elem) {
   const data = $elem.data(),
     site = Discourse.__container__.lookup("site:main");
 
@@ -15,12 +15,16 @@ function launchBBB($elem, fullWindow) {
   })
     .then((res) => {
       if (res.url) {
-        if (fullWindow || site.mobileView || isAppWebview()) {
+        if (
+          isAppWebview() ||
+          (site.mobileView && !data.mobileIframe) ||
+          (!site.mobileView && !data.desktopIframe)
+        ) {
           window.location.href = res.url;
         } else {
           $elem.children().hide();
           $elem.append(
-            `<iframe src="${res.url}" allowfullscreen="true" allow="camera; microphone; fullscreen; speaker" width="690" height="500" style="border:none"></iframe>`
+            `<iframe src="${res.url}" allowfullscreen="true" allow="camera; microphone; fullscreen; speaker" width="100%" height="500" style="border:none"></iframe>`
           );
         }
       }
@@ -30,7 +34,7 @@ function launchBBB($elem, fullWindow) {
     });
 }
 
-function attachButton($elem, fullWindow) {
+function attachButton($elem) {
   const buttonLabel = $elem.data("label") || I18n.t("bbb.launch");
 
   $elem.html(
@@ -38,7 +42,7 @@ function attachButton($elem, fullWindow) {
       "video"
     )} ${buttonLabel}</button>`
   );
-  $elem.find("button").on("click", () => launchBBB($elem, fullWindow));
+  $elem.find("button").on("click", () => launchBBB($elem));
 }
 
 function attachStatus($elem, helper) {
@@ -59,11 +63,8 @@ function attachStatus($elem, helper) {
 
 function attachBBB($elem, helper) {
   if (helper) {
-    const siteSettings = Discourse.__container__.lookup("site-settings:main");
-    const fullWindow = siteSettings.bbb_full_window;
-
     $elem.find("[data-wrap=discourse-bbb]").each((idx, val) => {
-      attachButton($(val), fullWindow);
+      attachButton($(val));
       $(val).append("<span class='bbb-status'></span>");
       attachStatus($(val), helper);
     });
