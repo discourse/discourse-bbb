@@ -4,8 +4,6 @@ en:
       composer_title: Add BigBlueButton
       meetingID: Meeting ID
       button_text: Button label (optional)
-      attendeePW: Attendee password
-      moderatorPW: Moderator password
       launch: Start Video Conference
       modal:
         insert: Insert

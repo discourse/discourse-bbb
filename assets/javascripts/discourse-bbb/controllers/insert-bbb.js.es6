@@ -1,5 +1,7 @@
 import Controller from "@ember/controller";
 import ModalFunctionality from "discourse/mixins/modal-functionality";
+import discourseComputed from "discourse-common/utils/decorators";
+import { isEmpty } from "@ember/utils";
 
 export default Controller.extend(ModalFunctionality, {
   keyDown(e) {
@@ -21,11 +23,26 @@ export default Controller.extend(ModalFunctionality, {
     });
   },
 
+  randomID() {
+    return Math.random()
+      .toString(36)
+      .slice(-8);
+  },
+
+  @discourseComputed("meetingID")
+  insertDisabled(meetingID) {
+    return isEmpty(meetingID);
+  },
+
   actions: {
     insert() {
       const btnTxt = this.buttonText ? ` label="${this.buttonText}"` : "";
       this.toolbarEvent.addText(
-        `[wrap=discourse-bbb meetingID="${this.meetingID}"${btnTxt} attendeePW="${this.attendeePW}" moderatorPW="${this.moderatorPW}" mobileIframe="${this.mobileIframe}" desktopIframe="${this.desktopIframe}"][/wrap]`
+        `[wrap=discourse-bbb meetingID="${
+          this.meetingID
+        }"${btnTxt} attendeePW="${this.randomID()}" moderatorPW="${this.randomID()}" mobileIframe="${
+          this.mobileIframe
+        }" desktopIframe="${this.desktopIframe}"][/wrap]`
       );
       this.send("closeModal");
     },
