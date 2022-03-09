@@ -3,11 +3,11 @@ import showModal from "discourse/lib/show-modal";
 import { iconHTML } from "discourse-common/lib/icon-library";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
-import { isAppWebview } from "discourse/lib/utilities";
 
 function launchBBB($elem) {
-  const data = $elem.data(),
-    site = Discourse.__container__.lookup("site:main");
+  const data = $elem.data();
+  const site = Discourse.__container__.lookup("site:main");
+  const capabilities = Discourse.__container__.lookup("capabilities:main");
 
   ajax("/bbb/create.json", {
     type: "POST",
@@ -16,7 +16,7 @@ function launchBBB($elem) {
     .then((res) => {
       if (res.url) {
         if (
-          isAppWebview() ||
+          capabilities.isAppWebview ||
           (site.mobileView && !data.mobileIframe) ||
           (!site.mobileView && !data.desktopIframe)
         ) {
