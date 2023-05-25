@@ -29,7 +29,7 @@ function launchBBB($elem) {
         }
       }
     })
-    .catch(function(error) {
+    .catch(function (error) {
       popupAjaxError(error);
     });
 }
@@ -52,7 +52,7 @@ function attachStatus($elem, helper) {
   ajax(`/bbb/status/${data.meetingID}.json`).then((res) => {
     if (res.avatars) {
       status.html(`<span>On the call: </span>`);
-      res.avatars.forEach(function(avatar) {
+      res.avatars.forEach(function (avatar) {
         status.append(
           `<img src="${avatar.avatar_url}" class="avatar" width="25" height="25" title="${avatar.name}" />`
         );

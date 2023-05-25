@@ -24,9 +24,7 @@ export default Controller.extend(ModalFunctionality, {
   },
 
   randomID() {
-    return Math.random()
-      .toString(36)
-      .slice(-8);
+    return Math.random().toString(36).slice(-8);
   },
 
   @discourseComputed("meetingID")

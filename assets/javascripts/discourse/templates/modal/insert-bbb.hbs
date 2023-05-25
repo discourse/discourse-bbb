@@ -1,33 +1,42 @@
-{{#d-modal-body title="bbb.modal.title" class="insert-bbb"}}
-<div class="insert-bbb-form">
-  <div class="insert-bbb-input">
-    <label>{{i18n "bbb.meetingID"}}</label>
-    {{text-field value=meetingID}}
-  </div>
+<DModalBody @title="bbb.modal.title" @class="insert-bbb">
+  <div class="insert-bbb-form">
+    <div class="insert-bbb-input">
+      <label>{{i18n "bbb.meetingID"}}</label>
+      <TextField @value={{meetingID}} />
+    </div>
 
-  <div class="insert-bbb-input bbb-button-text">
-    <label>{{i18n "bbb.button_text"}}</label>
-    {{text-field value=buttonText placeholderKey="bbb.launch"}}
-  </div>
+    <div class="insert-bbb-input bbb-button-text">
+      <label>{{i18n "bbb.button_text"}}</label>
+      <TextField @value={{buttonText}} @placeholderKey="bbb.launch" />
+    </div>
 
-  <div class="insert-bbb-input">
-    <label class='checkbox-label'>
-      {{input type="checkbox" checked=mobileIframe}}
-      {{i18n "bbb.modal.mobile_iframe"}}
-    </label>
-  </div>
+    <div class="insert-bbb-input">
+      <label class="checkbox-label">
+        {{input type="checkbox" checked=mobileIframe}}
+        {{i18n "bbb.modal.mobile_iframe"}}
+      </label>
+    </div>
 
-  <div class="insert-bbb-input">
-    <label class='checkbox-label'>
-      {{input type="checkbox" checked=desktopIframe}}
-      {{i18n "bbb.modal.desktop_iframe"}}
-    </label>
-  </div>
+    <div class="insert-bbb-input">
+      <label class="checkbox-label">
+        {{input type="checkbox" checked=desktopIframe}}
+        {{i18n "bbb.modal.desktop_iframe"}}
+      </label>
+    </div>
 
-</div>
-{{/d-modal-body}}
+  </div>
+</DModalBody>
 
 <div class="modal-footer">
-  {{d-button class="btn-primary" disabled=insertDisabled label="bbb.modal.insert" action=(action "insert")}}
-  {{d-button class="btn-danger" label="bbb.modal.cancel" action=(action "cancel")}}
+  <DButton
+    @class="btn-primary"
+    @disabled={{insertDisabled}}
+    @label="bbb.modal.insert"
+    @action={{action "insert"}}
+  />
+  <DButton
+    @class="btn-danger"
+    @label="bbb.modal.cancel"
+    @action={{action "cancel"}}
+  />
 </div>
