@@ -75,7 +75,7 @@ export default {
   name: "insert-bbb",
 
   initialize() {
-    withPluginApi("0.8.31", (api) => {
+    withPluginApi("1.15.0", (api) => {
       const currentUser = api.getCurrentUser();
       const siteSettings = api.container.lookup("site-settings:main");
 
@@ -87,23 +87,14 @@ export default {
         !siteSettings.bbb_staff_only ||
         (siteSettings.bbb_staff_only && currentUser && currentUser.staff)
       ) {
-        api.modifyClass("controller:composer", {
-          actions: {
-            insertBBBModal() {
-              showModal("insert-bbb").setProperties({
-                toolbarEvent: this.get("toolbarEvent"),
-              });
-            },
+        api.addComposerToolbarPopupMenuOption({
+          icon: "video",
+          label: "bbb.composer_title",
+          action: (toolbarEvent) => {
+            showModal("insert-bbb").setProperties({
+              toolbarEvent,
+            });
           },
-        });
-
-        api.addToolbarPopupMenuOptionsCallback((controller) => {
-          return {
-            id: "insert-bbb",
-            icon: "video",
-            action: "insertBBBModal",
-            label: "bbb.composer_title",
-          };
         });
       }
     });
