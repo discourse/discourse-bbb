@@ -75,7 +75,7 @@ export default {
   name: "insert-bbb",
 
   initialize() {
-    withPluginApi("1.15.0", (api) => {
+    withPluginApi("1.13.0", (api) => {
       const currentUser = api.getCurrentUser();
       const siteSettings = api.container.lookup("site-settings:main");
 
