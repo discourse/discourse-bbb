@@ -1,5 +1,4 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
-import showModal from "discourse/lib/show-modal";
 import { iconHTML } from "discourse-common/lib/icon-library";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
@@ -78,6 +77,7 @@ export default {
     withPluginApi("1.13.0", (api) => {
       const currentUser = api.getCurrentUser();
       const siteSettings = api.container.lookup("site-settings:main");
+      const modal = api.container.lookup("service:modal");
 
       api.decorateCooked(attachBBB, {
         id: "discourse-bbb",
@@ -90,11 +90,8 @@ export default {
         api.addComposerToolbarPopupMenuOption({
           icon: "video",
           label: "bbb.composer_title",
-          action: (toolbarEvent) => {
-            showModal("insert-bbb").setProperties({
-              toolbarEvent,
-            });
-          },
+          action: (toolbarEvent) =>
+            modal.show(InsertBBBModal, { model: { toolbarEvent } }),
         });
       }
     });
